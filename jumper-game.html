@@ -301,7 +301,8 @@ function mobileWordBounds(o){
   ctx.font=wordFont();
   var w=Math.min(ctx.measureText(o.pair.target).width+16,W*.26);
   var h=Math.max(24,H*.057);
-  var bottom=o.elevated?(GROUND-player.h*.75)*H:GROUND*H;
+  var standingUnit=Math.max(2,Math.floor(Math.min(player.w*W/24,player.h*H/32)));
+  var bottom=GROUND*H-(o.elevated?24*standingUnit:0);
   return{x:Math.round(o.x*W-w/2-3),y:Math.round(bottom-h-6),w:Math.round(w+6),h:Math.round(h+6)};
 }
 function objectBox(o){
