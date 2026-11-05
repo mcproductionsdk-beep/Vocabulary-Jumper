@@ -5,7 +5,7 @@ const root = new URL('../', import.meta.url);
 const out = new URL('dist-preview/', root);
 const engine = await readFile(new URL('jumper-game.html', root));
 const blob = createHash('sha1').update(`blob ${engine.length}\0`).update(engine).digest('hex');
-if (blob !== 'a39fe00a5eb02ac2c8ce738e00751e92d328ba4a') throw new Error('Pinned Jumper engine mismatch');
+if (blob !== '259f45fe599ed8326131eff503b8a6ad532ccc1c') throw new Error('Jumper preview engine mismatch');
 await rm(out, {recursive:true, force:true});
 await mkdir(out);
 for (const file of ['index.html', 'launcher.js', 'jumper-game.html']) {

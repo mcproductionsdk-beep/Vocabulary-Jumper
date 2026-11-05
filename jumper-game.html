@@ -481,7 +481,9 @@ function draw(){
     sp(6,15,6,2,pants);sp(12,14,7,3,pantsHi);
     sp(3,16,8,2,outline);sp(2,17,9,2,shoe);sp(14,16,8,2,outline);sp(14,17,9,2,shoe);
   }else{
-    var runFrame=Math.floor(worldScroll*30)%2;
+    var stride=Math.floor(worldScroll*48)%6;
+    var airborne=!player.onGround;
+    var swing=airborne?-1:[-1,-1,0,1,1,0][stride];
     /* hair / head */
     sp(6,0,10,2,outline);sp(4,2,14,3,outline);sp(4,5,3,6,outline);
     sp(7,3,10,8,skin);sp(8,3,8,2,skinHi);sp(15,5,2,2,outline);
@@ -491,21 +493,31 @@ function draw(){
     /* torso with outline and highlight */
     sp(5,13,14,2,outline);sp(4,15,16,10,outline);
     sp(6,15,12,9,shirt);sp(7,15,4,3,shirtHi);sp(11,16,2,8,white);
-    /* arms and fists */
-    sp(1,14,5,3,outline);sp(0,16,5,7,outline);sp(2,16,3,5,shirt);
-    sp(0,21,5,4,outline);sp(1,21,3,3,skin);
-    sp(18,14,5,3,outline);sp(20,16,4,7,outline);sp(20,16,2,5,shirt);
-    sp(20,21,4,4,outline);sp(20,21,3,3,skin);
-    /* belt / pants */
+    /* Bent arms counter-swing against the legs. */
+    sp(3+swing*2,15,5,7,outline);
+    sp(4+swing*2,16,3,5,shirt);
+    sp(2+swing*3,20,5,4,skin);
+    sp(16-swing*2,15,5,7,outline);
+    sp(17-swing*2,16,3,5,shirtHi);
+    sp(17-swing*3,20,5,4,skinHi);
     sp(5,24,14,3,outline);sp(7,24,10,2,pantsHi);
-    if(runFrame===0){
-      sp(6,26,5,4,pants);sp(13,26,5,3,pants);
-      sp(4,29,7,2,outline);sp(2,30,9,2,shoe);
-      sp(14,28,5,2,outline);sp(15,30,7,2,shoe);
+
+    function leg(hip,knee,foot,lift,color){
+      sp(hip,25,5,3,color);
+      sp(knee,27,5,3,color);
+      sp(foot,29-lift,5,2,color);
+      sp(foot,30-lift,7,2,shoe);
+    }
+    if(airborne){
+      /* A split stride keeps both legs visibly extended. */
+      leg(8,5,2,0,pants);
+      leg(13,15,17,0,pantsHi);
     }else{
-      sp(7,26,5,3,pants);sp(13,26,5,4,pants);
-      sp(5,28,5,2,outline);sp(2,30,8,2,shoe);
-      sp(14,29,6,2,outline);sp(14,30,9,2,shoe);
+      var reach=[-5,-2,1,5,2,-1][stride];
+      var backLift=[0,1,2,0,0,0][stride];
+      var frontLift=[0,0,0,0,1,2][stride];
+      leg(8,8+Math.trunc(reach/2),8+reach,backLift,pants);
+      leg(12,12-Math.trunc(reach/2),12-reach,frontLift,pantsHi);
     }
   }
   ctx.restore();
