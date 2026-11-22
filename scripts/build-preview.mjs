@@ -26,6 +26,7 @@ const [adapter, bootstrap, session, layout] = await Promise.all(
   ['adapter.js','bootstrap.mjs','session.mjs','layout.css'].map(file =>
     readFile(new URL('engine/'+file, root), 'utf8')));
 const integrated = engine.toString('utf8')
+  .replace('"fr-FR","it-IT"].includes(language)', '"fr-FR","it-IT","nb-NO","sv-SE"].includes(language)')
   .replace('<div class="logo">WORD JUMPER</div>', '')
   .replace('</head>', '<style>'+layout+'</style></head>')
   .replace('W=Math.max(300,r.width);H=Math.max(320,r.height)', 'W=Math.max(1,wrap.clientWidth);H=Math.max(1,wrap.clientHeight)')
